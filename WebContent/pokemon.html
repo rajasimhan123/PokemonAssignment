@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="scripts/angular.min.js"></script>
+<script src="scripts/pokemonApp.js"></script>
+<script src="scripts/pokemonDirectives.js"></script>
+<script src="scripts/pokemonServices.js"></script>
+<script src="scripts/pokemonFactory.js"></script>
+<script src="scripts/pokemonControllers.js"></script>
+<link rel="stylesheet" href="css/poke.css">
+<title>Pokemon Assignment</title>
+</head>
+<body ng-app="pokemonModule" ng-controller="mainController">
+	<div class="content">
+
+		<!-- Below directive is responsible for rendering the Pokemon search -->
+		<searchpokemon></searchpokemon>
+		<br>
+		<br>
+
+
+		<!--  Pokemon display List starts here -->
+		<table width="500">
+			<thead>
+				<tr>
+					<th><a href="#"
+						ng-click="orderByColumn='id'; reverseSort = !reverseSort"> Id</a></th>
+					<th><a href="#"
+						ng-click="orderByColumn='ename'; reverseSort = !reverseSort">Name</a></th>
+					<th>Image</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr tr-row ng-click="open(pokemon)"
+					ng-repeat="pokemon in pokemons | orderBy:orderByColumn:reverseSort | filter : searchText"
+					ng-controller="ItemController"></tr>
+			</tbody>
+		</table>
+		<!--  Pokemon display List ends here -->
+
+
+		<!--pokemon detail page starts here -->
+		<ng-switch on="anyPokemonOpen()">
+		<div ng-switch-when="true" ng-controller="ItemController">
+
+			<div class="single-pokemon page visible">
+				<div class="overlay"></div>
+				<div class="preview-large">
+					<!-- Pokeman Details Page Heading ie Name , Id and Image  -->
+					<center>
+						<h3>
+							{{openedPokemon.ename}} - #{{openedPokemon.id}}<img
+								class="smallimage"
+								ng-src="images/spr/{{openedPokemon.id}}MS.png">
+						</h3>
+					</center>
+					<img class="bigimage"
+						ng-src="images/img/{{openedPokemon.id}}{{openedPokemon.ename}}.png">
+					<table width="100%">
+
+						<!-- All details in the Pokemon  -->
+						<tr ng-repeat="(key, value) in openedPokemon.base">
+							<td>{{ key | uppercase }}</td>
+							<td>{{ value }}</td>
+						</tr>
+						<!-- All Pokemon Skill details -->
+						<tr ng-repeat="(key, value) in skill">
+							<td>{{ key | uppercase}}</td>
+							<td>{{ value }}</td>
+						</tr>
+						<tr>
+							<td>ENAME</td>
+							<td>{{type.ename}}</td>
+						</tr>
+					</table>
+					<!-- Close functionality for  preview page-->
+					<span ng-click="close()" class="close">×</span>
+				</div>
+
+			</div>
+		</ng-switch>
+	</div>
+</body>
+</html>
